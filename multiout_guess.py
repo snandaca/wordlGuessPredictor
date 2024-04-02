@@ -74,3 +74,5 @@ X_test = X_test_data.reshape(-1, 1)
 clf = MultiOutputClassifier(LogisticRegression()).fit(X_train_minmax, y_train)
 print (clf.predict(X_test[-2:]))
 #print (clf.predict_proba(X_test[-2:]))
+
+#Add today's word to end of data file
