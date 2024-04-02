@@ -50,19 +50,28 @@ for word in wordsAre:
 	# Give slightly higher value to vowels
 	for vowel in vowels:
 		XVal[lineNum]=XVal[lineNum]+(word.count(vowel) * letterFrequency[vowel])
+		#XVal[lineNum]=XVal[lineNum]+(word.count(vowel) * 3)
 	# Add in value for each character
+	lenOfChar=len(word)
+	curChar=1
 	for charIs in word:
 		XVal[lineNum]=XVal[lineNum]+(word.count(charIs) * letterFrequency[charIs])
-
+		# Add more if same char is next to each other
+		if ( (curChar ) < lenOfChar):
+			if (charIs == word[curChar]):
+				XVal[lineNum]=XVal[lineNum] - (letterFrequency[charIs] * 10)
+		curChar = curChar + 1
+	#print (XVal[lineNum])
 	lineNum=lineNum+1
 
 X_train_data = np.array(XVal)
 X_train = X_train_data.reshape(-1, 1)
 min_max_scaler = MinMaxScaler()
+min_max_scaler.fit(X_train)
 X_train_minmax = min_max_scaler.fit_transform(X_train)
 
 # Current day word
-testData = ["04/01/2024,FROND,98,4.3,0,2,21,36,28,11,2"]
+testData = ["04/01/2024,SERUM,98,4.3,0,2,21,36,28,11,2"]
 testWordIs = re.split(",", testData[0])
 testVal=0.0
 
@@ -75,4 +84,3 @@ clf = MultiOutputClassifier(LogisticRegression()).fit(X_train_minmax, y_train)
 print (clf.predict(X_test[-2:]))
 #print (clf.predict_proba(X_test[-2:]))
 
-#Add today's word to end of data file
